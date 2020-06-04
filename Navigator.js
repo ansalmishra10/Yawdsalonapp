@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import { View, Text, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
   import 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,34 +24,22 @@ import HomeScreen from './HomeScreen.js';
 import Appointment from './Appointment.js';
 import Notification from './Notification.js';
 import ProfileScreen from './ProfileScreen.js';
-import Drawer from './Drawer.js';
+
 import SupportScreen from './SupportScreen.js';
 import PrivacyScreen from './PrivacyScreen.js';
+import PackageScreen from './PackageScreen.js';
 import TcScreen from './TcScreen.js';
+import Allservice from './Allservice.js';
+import Summary from './Summary.js';
+import AddScreen from './AddScreen.js';
+import AddAddress from './AddAddress.js';
+import Map from './Map.js';
+import AppointScreen from './AppointScreen.js';
+import PaymentScreen from './PaymentScreen.js';
+import ThankScreen from './ThankScreen.js';
+import OnlineScreen from './OnlineScreen.js';
+import DetailScreen from './DetailScreen.js';
 
-
-const DrawerNavigator = createDrawerNavigator({
-   HomeScreen:{
-       screen: HomeScreen ,
-
-   navigationOptions: ({ navigation }) => ({
-     headerStyle: {
-     backgroundColor: 'black',
-    headerTintColor: '#ffffff',
-    tintColor: {
-    color: '#ffffff'
-   },
-   headerTitleStyle: { color: 'black' }
-   },
-
- }),
- }
-
-},{
-   initialRouteName: 'HomeScreen',
-   contentComponent: Drawer,
-   drawerWidth: 250
-});
 
 
 
@@ -106,7 +99,37 @@ function Tabs() {
 }
 
 
+ function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Close drawer"
+        onPress={() => props.navigation.closeDrawer()}
+      />
+      <DrawerItem
+        label="Toggle drawer"
+        onPress={() => props.navigation.toggleDrawer()}
+      />
+    </DrawerContentScrollView>
+  );
+}
 
+const Drawer = createDrawerNavigator();
+
+
+function DrawerTab() {
+  return (
+       
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <CustomDrawerContent {...props} />} drawerWidth={250}>
+        <Drawer.Screen name="HomeScreen" component={HomeScreen} />
+        <Drawer.Screen name="TcScreen" component={TcScreen} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+
+);
+}
 
 
 
@@ -132,12 +155,23 @@ function App() {
         <Stack.Screen name="SupportScreen" component={SupportScreen} />
         <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} />
         <Stack.Screen name="TcScreen" component={TcScreen} />
-        <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+        <Stack.Screen name="PackageScreen" component={PackageScreen} />
+        <Stack.Screen name="Allservice" component={Allservice} />
+        <Stack.Screen name="Summary" component={Summary} />
+        <Stack.Screen name="AddScreen" component={AddScreen} />
+        <Stack.Screen name="AddAddress" component={AddAddress} />
+        <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="AppointScreen" component={AppointScreen} />
+        <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
+        <Stack.Screen name="ThankScreen" component={ThankScreen} />
+        <Stack.Screen name="OnlineScreen" component={OnlineScreen} />
+        <Stack.Screen name="DetailScreen" component={DetailScreen} />
+        
 
         
 
 
-
+        <Stack.Screen name="DrawerTab" component={DrawerTab} />
         <Stack.Screen name="Tab" component={Tabs} />
 
       </Stack.Navigator>
