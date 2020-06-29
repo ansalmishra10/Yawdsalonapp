@@ -29,13 +29,16 @@ const GLOBAL = require('./Global');
 import Shimmer from 'react-native-shimmer';
 
 
-class ForgetScreen extends React.Component {
+class ChangePassword extends React.Component {
   constructor() {
     super();
      this.state = {
       
-      mobile: '',
+      conpass: '',
+      newpass:'',
       loading: '',
+      hidePassword: true,
+      hidePassword2: true,
 
          }
 
@@ -49,16 +52,36 @@ class ForgetScreen extends React.Component {
         this.setState({loading: false})
        }
 
+       managePasswordVisibility = () => {
+       this.setState({ hidePassword: !this.state.hidePassword });
+        }
+
+        managePasswordVisibility2 = () => {
+       this.setState({ hidePassword2: !this.state.hidePassword2 });
+        }
+
 
     getRemoteData=()=>{
 
-      if (this.state.mobile == ''){
-       alert('Please Enter Mobile No.')
+      if (this.state.newpass == ''){
+       alert('Please Enter New Password')
+     }
+
+     else if (this.state.newpass.length < 6){
+       alert('New Password must be 6 chracter long')
+     }
+
+     else if(this.state.conpass == ''){
+       alert('Please Confirm Your Password')
+     }
+
+     else if(this.state.conpass != this.state.newpass){
+       alert('Password dont match')
      }
 
      else{
 
-        const url = GLOBAL.BASE_URL +  'otp'
+        const url = GLOBAL.BASE_URL +  'forgot'
 
           this.showLoading()
             fetch(url, {
@@ -72,9 +95,11 @@ class ForgetScreen extends React.Component {
                 certs: ['yawd']
             },
             body: JSON.stringify({
-              "mobile": this.state.mobile,
-              "user_id": ''
               
+  "user_id": GLOBAL.user_id,
+  "new_password": this.state.newpass,
+  "confirm_password":this.state.conpass,
+
               
             })
         })
@@ -86,12 +111,10 @@ class ForgetScreen extends React.Component {
     this.hideLoading()
     if (responseData.status == true ) { 
 
-        GLOBAL.mobile = this.state.mobile
-
-        GLOBAL.user_id = responseData.user_id
         
-        alert('OTP Sent')
-        this.props.navigation.replace('OtpScreen2')
+        
+        alert('Password Changed')
+        this.props.navigation.replace('LoginScreen2')
       
         
       
@@ -155,35 +178,70 @@ class ForgetScreen extends React.Component {
                   </TouchableOpacity> 
 
 
-                  <Text style={{fontSize:28,fontFamily:'Poppins-SemiBold',color:'#000000',marginTop:'15%',marginLeft:20}}>Forgot</Text>
+                  <Text style={{fontSize:28,fontFamily:'Poppins-SemiBold',color:'#000000',marginTop:'15%',marginLeft:20}}>Change</Text>
                   <Text style={{fontSize:28,fontFamily:'Poppins-SemiBold',color:'#000000',marginLeft:20,marginTop:-8}}>Password</Text>
                   
 
-                  <Text style={{fontSize:11,fontFamily:'Poppins-Medium',color:'#000000A6',marginLeft:20,marginTop:38}}>Please enter the mobile number</Text>
-                <Text style={{fontSize:11,fontFamily:'Poppins-Medium',color:'#000000A6',marginLeft:20}}>associated with your account. We will</Text>
-                <Text style={{fontSize:11,fontFamily:'Poppins-Medium',color:'#000000A6',marginLeft:20}}>mobile you a link to reset your password.</Text>
+                  <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'#000000A6',marginLeft:20,marginTop:38,width:'55%'}}>Please enter your new password to continue with YAWD</Text>
+                
                     
               </ImageBackground>
 
                 
                 
 
-                <View style={{flexDirection:'row',marginLeft:'5%',marginTop:35,borderRadius:4,height:50,width:'90%',borderWidth:1,borderColor:'#00000066',justifyContent:'center'}}>
-            <Image
-               style={{height:30,width:30,marginTop:10,marginLeft:-23}}
-               source={require('./phonelogo2.png')}
+                <View style={{flexDirection:'row',height:50,width:'90%',borderRadius:4,marginLeft:'5%',marginTop:'8%',justifyContent:'center',borderWidth:1,borderColor:'#00000066'}}>
+
+             <Image
+               style={{height:26,width:26,marginTop:10,marginLeft:-8}}
+               source={require('./otplogo.png')}
               />
 
               <TextInput
-              style={{height: 50,width:'82%',fontSize:17,fontFamily:'Poppins-Regular'}}
-              placeholder="Phone Number"
+              style={{height: 50,width:'74%',fontSize:17,marginLeft:2,fontFamily:'Poppins-Regular'}}
+              placeholder="New Password"
               placeholderTextColor="#00000066"
-              maxLength={10}
-              keyboardType="numeric"
-              onChangeText={(text) => this.setState({mobile: text})}
-              value={this.state.mobile}
+              onChangeText={(text) => this.setState({newpass: text})}
+              secureTextEntry={this.state.hidePassword}
+              value={this.state.newpass}
               />
-             </View>
+
+              <TouchableOpacity style={{height:24,width:24,marginTop:12,marginLeft:16}}
+                onPress = { this.managePasswordVisibility }>
+              <Image
+                style={{height:24,width:24}}
+                source={(this.state.hidePassword) ?   require('./hidelogo.png') : require('./showlogo.png') }
+               />
+               </TouchableOpacity>
+
+           </View>
+
+
+           <View style={{flexDirection:'row',height:50,width:'90%',borderRadius:4,marginLeft:'5%',marginTop:'8%',justifyContent:'center',borderWidth:1,borderColor:'#00000066'}}>
+
+             <Image
+               style={{height:26,width:26,marginTop:10,marginLeft:-8}}
+               source={require('./otplogo.png')}
+              />
+
+              <TextInput
+              style={{height: 50,width:'74%',fontSize:17,marginLeft:2,fontFamily:'Poppins-Regular'}}
+              placeholder="Confirm Password"
+              placeholderTextColor="#00000066"
+              onChangeText={(text) => this.setState({conpass: text})}
+              secureTextEntry={this.state.hidePassword2}
+              value={this.state.conpass}
+              />
+
+              <TouchableOpacity style={{height:24,width:24,marginTop:12,marginLeft:16}}
+                onPress = { this.managePasswordVisibility2 }>
+              <Image
+                style={{height:24,width:24}}
+                source={(this.state.hidePassword2) ?   require('./hidelogo.png') : require('./showlogo.png') }
+               />
+               </TouchableOpacity>
+
+           </View>
 
 
              <TouchableOpacity style={{marginTop:45,alignSelf:'center',width:'92%',height:48,borderRadius:24,backgroundColor:'black',justifyContent:'center'}}
@@ -191,7 +249,7 @@ class ForgetScreen extends React.Component {
 
                  
 
-                  <Text style={{fontSize:16,color:'white',fontFamily:'Poppins-SemiBold',alignSelf:'center'}}>Forgot Password</Text>
+                  <Text style={{fontSize:16,color:'white',fontFamily:'Poppins-SemiBold',alignSelf:'center'}}>Continue</Text>
 
                   
 
@@ -208,4 +266,4 @@ class ForgetScreen extends React.Component {
 }
 
 
-export default ForgetScreen;
+export default ChangePassword;

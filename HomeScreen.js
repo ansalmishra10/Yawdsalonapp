@@ -18,19 +18,21 @@ import {
   ActivityIndicator,
   Animated,
   Modal,
+  BackHandler
 
   } from 'react-native';
 import React, {Component} from 'react';
 import Button from 'react-native-button';
 import { NavigationContainer
  } from '@react-navigation/native';
-import {
+ import {
   createDrawerNavigator,
-  DrawerActions,
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+
+import Geolocation from '@react-native-community/geolocation';
 import 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import HTML from 'react-native-render-html';
@@ -55,6 +57,8 @@ class HomeScreen extends React.Component {
      super(props);
        this.state ={
     
+         lat:'',
+         long:'',
          Flatlistitems1:[],
          Flatlistitems2:[],
          Flatlistitems3:[],
@@ -73,9 +77,7 @@ class HomeScreen extends React.Component {
         this.setState({loading: false})
        }
 
-       toggleDrawer = () => {
-    this.props.navigation.dispatch(DrawerActions.toggleDrawer())
-  }
+       
 
 
    setValue =(type) =>{
@@ -83,6 +85,7 @@ class HomeScreen extends React.Component {
      // alert(JSON.stringify(type))
      
        GLOBAL.gender = type
+
 
      const url = GLOBAL.BASE_URL +  'get_categories_vah'
 
@@ -112,10 +115,11 @@ class HomeScreen extends React.Component {
                if (responseData.status == true) {
                 
                 this.setModalVisible2()
-                // alert(JSON.stringify(responseData))
+                 // alert(JSON.stringify(responseData))
                 GLOBAL.allservice = responseData.data
+                GLOBAL.cat1 = responseData.data[1].category_id
              // this.setState({Flatlistitems1: responseData.top_banners })
-               this.props.navigation.navigate('Allservice')
+                this.props.navigation.navigate('Allservice')
             }
             else{
                 alert('Invalid Credentials!')
@@ -136,17 +140,89 @@ class HomeScreen extends React.Component {
 
    componentDidMount () {
       // alert(JSON.stringify(GLOBAL.token))
+       Geolocation.getCurrentPosition(info => {
+        
+        this.setState({ lat : info.coords.latitude })
+        this.setState({ long : info.coords.longitude })
+        // alert(JSON.stringify(this.state.lat))
+        const url = GLOBAL.BASE_URL +  'lat_long_address'
+
+          this.showLoading()
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              "latitude": this.state.lat,
+              "longitude": this.state.long
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+
+
+                  // alert(JSON.stringify(responseData.address))
+                  GLOBAL.house = responseData.address
+               
+
+    this.hideLoading()
+            
+
+           
+      })
+      .catch((error) =>{
+        console.error(error);
+      })
+
+        });
+
+
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
       this.getData();
    }
 
  
-  
+   componentWillUnmount(){
+   BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+   }
+
+
+   
+
+   handleBackButton=()=>{
+
+     Alert.alert(
+      'Exit From App' ,
+      'Do you want to exit from App?',
+      [
+        { text: 'Yes', onPress: () => BackHandler.exitApp()  },
+        { text: 'No', onPress: () => console.log('No Pressed')  }
+      ],
+
+      { cancelable: false },
+
+      );
+
+     return true;
+   }
    
 
 
    getData=()=> {
-
+  
+      this._unsubscribe = this.props.navigation.addListener('focus', () => {
        // alert(JSON.stringify(GLOBAL.user_id))
          const url = GLOBAL.BASE_URL +  'gethomepage'
 
@@ -173,7 +249,8 @@ class HomeScreen extends React.Component {
              
 
 
-               // alert(JSON.stringify(responseData))
+                  // alert(JSON.stringify(responseData.packages))
+                GLOBAL.min_pay = responseData.rules.min_payout
              this.setState({Flatlistitems1: responseData.top_banners })
                // alert(JSON.stringify(this.state.Flatlistitems1))
               
@@ -192,6 +269,8 @@ class HomeScreen extends React.Component {
       .catch((error) =>{
         console.error(error);
       })
+
+    })
    }
 
   renderItem=({item}) => {
@@ -200,7 +279,8 @@ class HomeScreen extends React.Component {
 
 <View>
 
-<TouchableOpacity style={{margin:10,borderRadius:8,elevation:3}}>
+<TouchableOpacity style={{margin:10,borderRadius:8,elevation:3}}
+onPress={()=>this.getbannerDetails(item.package_id, item.service_id)}>
 
 
  
@@ -220,6 +300,126 @@ class HomeScreen extends React.Component {
  </View>
 
 )
+}
+
+getbannerDetails=(package_id, service_id)=> {
+
+   // alert(JSON.stringify(package_id))
+
+  if (package_id !=0 && service_id==0 ) {
+       // alert(JSON.stringify(package_id))
+
+
+
+       const url = GLOBAL.BASE_URL +  'package_details'
+
+          this.showLoading()
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json'
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              "package_id": package_id,
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+             this.hideLoading()
+
+               if (responseData.status == true) {
+                
+                
+                  // alert(JSON.stringify(responseData))
+                  
+                  GLOBAL.package = responseData.package
+                  
+                  this.props.navigation.navigate('PackageScreen')
+               
+            }
+            else{
+                alert('Invalid Credentials!')
+            }
+
+               
+
+    
+            
+
+           
+      })
+      .catch((error) =>{
+        console.error(error);
+      })
+  }
+  
+  else if (package_id ==0 && service_id !=0 ) {
+       // alert(JSON.stringify(service_id))
+
+       const url = GLOBAL.BASE_URL +  'service_details'
+
+
+
+          this.showLoading()
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json'
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              "service_id": service_id,
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+             this.hideLoading()
+
+               if (responseData.status == true) {
+                
+                
+                  // alert(JSON.stringify(responseData))
+                  
+                  GLOBAL.package = responseData.service
+                  this.props.navigation.navigate('PackageScreen')
+               
+            }
+            else{
+                alert('Invalid Credentials!')
+            }
+
+               
+
+    
+            
+
+           
+      })
+      .catch((error) =>{
+        console.error(error);
+      })
+  }
+
+  else {
+      // alert('chutiye')
+  }
 }
 
 
@@ -249,7 +449,7 @@ setModalVisible4=()=> {
 
 <View>
 
-<TouchableOpacity style={{height:'auto',borderRadius:6,marginLeft:10,elevation:2,marginBottom:10}}>
+<TouchableOpacity style={{height:'auto',borderRadius:6,marginLeft:10,elevation:2,marginBottom:10}} onPress={()=>this.setValuePack(item.package_id)}>
 
 
 <View style={{height:'auto',width:Dimensions.get('window').width - 80,backgroundColor:'white',borderRadius:6}}>
@@ -272,9 +472,9 @@ setModalVisible4=()=> {
     </View>
     
     
-    <HTML html={item.description} containerStyle={{marginTop:5}} imagesMaxWidth={Dimensions.get('window').width} />
+    <HTML html={item.description} containerStyle={{marginTop:5}} imagesInitialDimensions={{height:100}} imagesMaxWidth={Dimensions.get('window').width} />
 
-    <Text style={{fontSize:14,fontFamily:'Poppins-Medium',color:'#00000066',marginLeft:20,marginTop:-15}}>{item.duration} minutes</Text>
+    <Text style={{fontSize:14,fontFamily:'Poppins-Medium',color:'#00000066',marginLeft:20}}>{item.duration} minutes</Text>
      
      <View style={{flexDirection:'row',alignItems:'center',width:'90%',marginLeft:'6%',justifyContent:'space-between',marginBottom:10,marginTop:5}}>
       <Text style={{fontSize:16,fontFamily:'Poppins-SemiBold',color:'#FF8C00',textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>₹ {item.mrp}</Text>
@@ -303,6 +503,61 @@ setModalVisible4=()=> {
 
 _keyExtractor2=(item, index)=>item.key;
 
+setValuePack=(package_id)=>{
+  // alert(JSON.stringify(item))
+  const url = GLOBAL.BASE_URL +  'package_details'
+
+          this.showLoading()
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json'
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              "package_id": package_id,
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+             this.hideLoading()
+
+               if (responseData.status == true) {
+                
+                
+                  // alert(JSON.stringify(responseData))
+                  
+                  GLOBAL.package = responseData.package
+                  
+                  this.props.navigation.navigate('PackageScreen')
+               
+            }
+            else{
+                alert('Invalid Credentials!')
+            }
+
+               
+
+    
+            
+
+           
+      })
+      .catch((error) =>{
+        console.error(error);
+      })
+}
+
+
+
 
 renderItem3=({item}) => {
        // console.log(item.image)
@@ -310,7 +565,8 @@ renderItem3=({item}) => {
 
 <View>
 
-<TouchableOpacity style={{marginLeft:10,borderRadius:8,elevation:3,marginBottom:10}}>
+<TouchableOpacity style={{marginLeft:10,borderRadius:8,elevation:3,marginBottom:10}}
+ onPress={()=>this.bottombannerDetails(item.package_id, item.service_id)}>
 
 
  
@@ -332,11 +588,126 @@ renderItem3=({item}) => {
 )
 }
 
+bottombannerDetails=(package_id, service_id)=> {
+  if (package_id !=0 && service_id==0 ) {
+       // alert(JSON.stringify(package_id))
+
+       const url = GLOBAL.BASE_URL +  'package_details'
+
+          this.showLoading()
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json'
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              "package_id": package_id,
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+             this.hideLoading()
+
+               if (responseData.status == true) {
+                
+                
+                  // alert(JSON.stringify(responseData))
+                  
+                  GLOBAL.package = responseData.package
+                  
+                  this.props.navigation.navigate('PackageScreen')
+               
+            }
+            else{
+                alert('Invalid Credentials!')
+            }
+
+               
+
+    
+            
+
+           
+      })
+      .catch((error) =>{
+        console.error(error);
+      })
+  }
+  
+  else if (package_id ==0 && service_id !=0 ) {
+       // alert(JSON.stringify(service_id))
+
+       const url = GLOBAL.BASE_URL +  'service_details'
+
+
+
+          this.showLoading()
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json'
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              "service_id": service_id,
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+             this.hideLoading()
+
+               if (responseData.status == true) {
+                
+                
+                  // alert(JSON.stringify(responseData))
+                  
+                  GLOBAL.package = responseData.service
+                  this.props.navigation.navigate('PackageScreen')
+               
+            }
+            else{
+                alert('Invalid Credentials!')
+            }
+
+               
+
+    
+            
+
+           
+      })
+      .catch((error) =>{
+        console.error(error);
+      })
+  }
+
+  else {
+      // alert('chutiye')
+  }
+}
+
 
 _keyExtractor3=(item, index)=>item.key;
 
 setValueAgain=(type)=>{
-  alert(JSON.stringify(type))
+  // alert(JSON.stringify(type))
    GLOBAL.type = type
    this.setModalVisible4()
    this.props.navigation.navigate('HaircutScreen')
@@ -367,7 +738,37 @@ setValueAgain=(type)=>{
                       <StatusBar backgroundColor="black" barStyle="light-content" />
 
 
-                      
+                      <View style = {{height:60,backgroundColor:'black',flexDirection:'row',width:'100%',alignItems:'center',justifyContent:'space-between'}}>
+                        <View>
+                        <TouchableOpacity onPress={()=>this.props.navigation.toggleDrawer()}>
+                            <Image
+                                source={require('./drawer.png')}
+                                style={{width: 30, height:30,marginLeft:20,resizeMode:'contain'}}
+
+
+                            />
+                        </TouchableOpacity>
+                        </View>
+                       
+                        <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'white',width:'68%'}}>{GLOBAL.house}</Text>
+
+                        <View>
+                        <TouchableOpacity>
+                            <Image
+                                source={require('./search.png')}
+                                style={{width: 25, height: 25,resizeMode:'contain',marginRight:20}}
+
+
+                            />
+                        </TouchableOpacity>
+                        </View>
+
+
+                        
+
+                        
+
+                    </View>
 
                     <ScrollView style={{flex:1,backgroundColor:'#e3e3e3'}}>
 

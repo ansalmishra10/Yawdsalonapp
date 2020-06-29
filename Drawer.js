@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { NavigationActions,StackActions} from '@react-navigation/native';
+
 import PropTypes from 'prop-types';
 import {ScrollView, Text, View ,Linking,AsyncStorage,    StyleSheet,Share,
 Image,TouchableOpacity,Alert,} from 'react-native';

@@ -6,16 +6,32 @@
  * @flow strict-local
  */
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {Component} from 'react';
 import {
   SafeAreaView,
+  Platform,
   StyleSheet,
   ScrollView,
   View,
   Text,
   StatusBar,
+  Alert,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  ImageBackground,
+  Linking,
+  FlatList,
+  Dimensions,
+  AsyncStorage,
+  ActivityIndicator,
 } from 'react-native';
 import NavigationContainer from './Navigator.js';
+import PushNotification from 'react-native-push-notification';
+import appConfig from './app.json';
+import NotifService from './NotifService';
+
+
 
 
 
@@ -26,18 +42,44 @@ const instructions = Platform.select({
       'Shake or press menu button for dev menu',
  });
 
+ type Props = {};
+ export default class App extends Component<Props> {
+  constructor(props) {
+      super(props);
+      this.state = {
+        senderId: appConfig.senderID,
+        gotNotif:0
+      };
 
-type Props = {};
+      this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
+    //  this.notif.localNotif()
+    }
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar backgroundColor="black" barStyle="dark-content" />
-      <NavigationContainer/>
-    </>
-  );
-};
+  render() {
+   //StatusBar.setBarStyle('light-content', true);
+    return (
+<>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
+        <NavigationContainer/>
+        </>
+    );
+    }
 
+    onRegister(token) {
+      AsyncStorage.setItem('firetoken', token.token);
+      GLOBAL.firebaseToken= token.token
+      console.log( 'TOKEN:', token );
+      this.setState({ registerToken: token.token, fcmRegistered: true });
+    }
 
+    onNotif(notif) {
+      console.log(notif);
+//      Alert.alert(notif.title, notif.message);
+      this.setState({gotNotif: 1})
+    }
 
-export default App;
+    handlePerm(perms) {
+      Alert.alert("Permissions", JSON.stringify(perms));
+    }
+  
+ }

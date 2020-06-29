@@ -15,6 +15,7 @@ import StyleScreen2  from './StyleScreen2.js';
 import LoginScreen2 from './LoginScreen2.js';
 import SignupScreen from './SignupScreen.js';
 import OtpScreen from './OtpScreen.js';
+import OtpScreen2 from './OtpScreen2.js';
 import BookServices from './BookServices.js';
 import HaircutScreen from './HaircutScreen.js';
 import SettingScreen from './SettingScreen.js';
@@ -39,6 +40,14 @@ import PaymentScreen from './PaymentScreen.js';
 import ThankScreen from './ThankScreen.js';
 import OnlineScreen from './OnlineScreen.js';
 import DetailScreen from './DetailScreen.js';
+import AllserviceSalon from './AllserviceSalon.js';
+import ViewScreen from './ViewScreen.js';
+import ChangePassword from './ChangePassword.js';
+import NotifService from './NotifService.js';
+import Dummy from './Dummy.js';
+import Wallet from './Wallet.js';
+import AgainScreen from './AgainScreen.js';
+
 
 
 
@@ -99,21 +108,7 @@ function Tabs() {
 }
 
 
- function CustomDrawerContent(props) {
-  return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-      <DrawerItem
-        label="Close drawer"
-        onPress={() => props.navigation.closeDrawer()}
-      />
-      <DrawerItem
-        label="Toggle drawer"
-        onPress={() => props.navigation.toggleDrawer()}
-      />
-    </DrawerContentScrollView>
-  );
-}
+ 
 
 const Drawer = createDrawerNavigator();
 
@@ -122,7 +117,7 @@ function DrawerTab() {
   return (
        
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <CustomDrawerContent {...props} />} drawerWidth={250}>
+      <Drawer.Navigator initialRouteName="HomeScreen" >
         <Drawer.Screen name="HomeScreen" component={HomeScreen} />
         <Drawer.Screen name="TcScreen" component={TcScreen} />
       </Drawer.Navigator>
@@ -146,6 +141,7 @@ function App() {
         <Stack.Screen name="LoginScreen2" component={LoginScreen2} />
         <Stack.Screen name="SignupScreen" component={SignupScreen} />
         <Stack.Screen name="OtpScreen" component={OtpScreen} />
+        <Stack.Screen name="OtpScreen2" component={OtpScreen2} />
         <Stack.Screen name="BookServices" component={BookServices} />
         <Stack.Screen name="HaircutScreen" component={HaircutScreen} />
         <Stack.Screen name="SettingScreen" component={SettingScreen} />
@@ -166,7 +162,13 @@ function App() {
         <Stack.Screen name="ThankScreen" component={ThankScreen} />
         <Stack.Screen name="OnlineScreen" component={OnlineScreen} />
         <Stack.Screen name="DetailScreen" component={DetailScreen} />
-        
+        <Stack.Screen name="AllserviceSalon" component={AllserviceSalon} />
+        <Stack.Screen name="ViewScreen" component={ViewScreen} />
+        <Stack.Screen name="ChangePassword" component={ChangePassword} />
+        <Stack.Screen name="NotifService" component={NotifService} />
+        <Stack.Screen name="Dummy" component={Dummy} />
+        <Stack.Screen name="Wallet" component={Wallet} />
+        <Stack.Screen name="AgainScreen" component={AgainScreen} />
 
         
 
