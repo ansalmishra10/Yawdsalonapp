@@ -53,7 +53,7 @@ class SupportScreen extends React.Component {
                         <View>
                         <TouchableOpacity onPress= {()=>this.props.navigation.goBack()}>
                             <Image
-                                source={require('./arrowlogo2.png')}
+                                source={require('./back2.png')}
                                 style={{width: 18, height: 20,marginLeft:20,resizeMode:'contain'}}
 
 

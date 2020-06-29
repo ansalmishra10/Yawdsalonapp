@@ -14,6 +14,7 @@ import {
   Linking,
   FlatList,
   Dimensions,
+  AsyncStorage,
 
 
 
@@ -21,7 +22,7 @@ import {
   } from 'react-native';
 
 import React, {Component} from 'react';
-
+const GLOBAL = require('./Global');
 
 
 
@@ -42,11 +43,34 @@ class SplashScreen2 extends React.Component {
   //   }
   // }
 
-  componentDidMount () {
+  
 
+
+
+   getData = async () => {
+    try {
+      const tokenvalue = await AsyncStorage.getItem('token')
+      const value = await AsyncStorage.getItem('userID')
+      if(value !== null && tokenvalue !== null) {
+        // value previously stored
+           GLOBAL.user_id = value
+           GLOBAL.token = tokenvalue
+          this.props.navigation.navigate('Tab')
+      }else{
+          this.props.navigation.navigate('StyleScreen2')
+
+      }
+    } catch(e) {
+      // error reading value
+    }
+  }
+
+     componentDidMount () {
+          
+          // alert(JSON.stringify(GLOBAL.userID))
      this.timeoutCheck = setTimeout(() => {
-       
-      this.props.navigation.navigate('LoginScreen2')
+          this.getData()
+       // this.props.navigation.navigate('StyleScreen2')
 
   },1000);
   
@@ -79,7 +103,7 @@ class SplashScreen2 extends React.Component {
            />
               <Image
                    style={{height:'100%',width:'100%'}}
-                   source={require('./splash.png')}
+                   source={require('./splashlogo2.png')}
                    />
 
         </View>

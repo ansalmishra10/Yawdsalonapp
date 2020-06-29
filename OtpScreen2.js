@@ -31,7 +31,7 @@ const GLOBAL = require('./Global');
 import {fetch, removeCookieByName} from 'react-native-ssl-pinning';
 
 
-class OtpScreen extends React.Component {
+class OtpScreen2 extends React.Component {
   constructor(props){
     super(props);
 
@@ -96,13 +96,13 @@ class OtpScreen extends React.Component {
 
        
 
-        // alert(JSON.stringify(responseData))
+         alert('OTP verified')
 
         
 
         
          
-        this.props.navigation.navigate('Tab')
+        this.props.navigation.replace('ChangePassword')
       
         
       
@@ -268,4 +268,4 @@ class OtpScreen extends React.Component {
 }
 
 
-export default OtpScreen;
+export default OtpScreen2;

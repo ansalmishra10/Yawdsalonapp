@@ -175,11 +175,11 @@ class SignupScreen extends React.Component {
 
         GLOBAL.mobile = this.state.mobile
 
-        alert(JSON.stringify(responseData))
+        // alert(JSON.stringify(responseData))
 
         
 
-        GLOBAL.userID = responseData.user_id
+        GLOBAL.user_id = responseData.user_id
          
         this.props.navigation.replace('OtpScreen')
       
@@ -416,24 +416,22 @@ class SignupScreen extends React.Component {
                             this.setState({date: date})
                           }}
                         />
-                     </View>   
+                     </View> 
 
-                <TouchableOpacity style={{marginTop:45,alignSelf:'center',width:'92%'}}
+                  <TouchableOpacity style={{marginTop:45,alignSelf:'center',width:'92%',height:48,borderRadius:24,backgroundColor:'black',justifyContent:'center'}}
                  onPress={()=>this.getRemoteData()}>
 
+                 
 
-      
+                  <Text style={{fontSize:16,color:'white',fontFamily:'Poppins-SemiBold',alignSelf:'center'}}>Sign Up</Text>
 
-                   <LinearGradient
-                     start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                     colors={['#F80E94','#FF69B4' ]}
-                     style={{height:54,width:'100%',borderRadius:27,justifyContent:'center'}}>
-                     <Text style={{fontSize:20,color:'#ffffff',fontFamily:'Poppins-Medium',alignSelf:'center',backgroundColor: 'transparent'}}>
-                      Sign Up
-                     </Text>
-                  </LinearGradient>
+                  
 
-                </TouchableOpacity>
+                 
+
+            </TouchableOpacity>     
+
+                
 
           <Text style={{fontSize:14,fontFamily:'Poppins-Medium',color:'#000000CC',marginTop:25,alignSelf:'center'}}>Already have an account?</Text>
          
