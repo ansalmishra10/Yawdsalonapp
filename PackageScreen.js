@@ -100,7 +100,7 @@ class PackageScreen extends React.Component {
                
             }
             else{
-                alert('Please select services of either visit at Home or Salon.')
+                alert(JSON.stringify(responseData.message))
             }
 
                
@@ -158,7 +158,7 @@ class PackageScreen extends React.Component {
                
             }
             else{
-                alert('Please select services of either visit at Home or Salon.')
+                alert(JSON.stringify(responseData.message))
             }
 
                

@@ -67,7 +67,7 @@ var radio_props = [
 
   componentDidMount() {
      // alert(JSON.stringify(GLOBAL.sum_id))
-     // alert(JSON.stringify(GLOBAL.sum))
+      // alert(JSON.stringify(GLOBAL.sum))
   }
 
   showLoading() {
@@ -80,7 +80,8 @@ var radio_props = [
 
 
     payCheck=()=> {
-      if (GLOBAL.sum > GLOBAL.min_pay) {
+      // alert(JSON.stringify(GLOBAL.shop_id))
+      if (GLOBAL.sum >= GLOBAL.min_pay) {
         this.setValue()
       }
 
@@ -98,15 +99,30 @@ var radio_props = [
          mode= 'online'
 
          GLOBAL.mode = mode
-          this.props.navigation.replace('OnlineScreen')
+           this.props.navigation.replace('OnlineScreen')
       
        
 
       }
       else if(this.state.value==1) {
            mode= 'cash'
-          // alert(JSON.stringify(GLOBAL.sum))
-         const url = GLOBAL.BASE_URL +  'booking'
+           GLOBAL.mode = mode
+            // alert(JSON.stringify(GLOBAL.shop_id))
+            this.payTrac();
+
+         
+      
+      }
+
+    
+
+  }
+
+  payTrac=()=> {
+
+    if (GLOBAL.shop_id == 0) {
+
+        const url = GLOBAL.BASE_URL +  'booking'
 
         
 
@@ -131,11 +147,11 @@ var radio_props = [
                 "appointment_date":GLOBAL.date,
                 "appointment_time":GLOBAL.time,
                 "total_amount":GLOBAL.sum,
-                "payment_mode":mode,
-                "discount":'',
-                "coupan_id":'',
-                "coupan_discount":'',
-                "wallet_discount":''
+                "payment_mode":GLOBAL.mode,
+                "discount":0,
+                "coupan_id":0,
+                "coupan_discount":0,
+                "wallet_discount":0
             
               
               
@@ -168,10 +184,73 @@ var radio_props = [
         console.error(error);
       })
 
-      
-      }
+    }
+
+    else {
+
+       const url = GLOBAL.BASE_URL +  'booking'
+
+        
+
+          this.showLoading()
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              
+          
+                "user_id":GLOBAL.user_id,
+                "address_id": 0,
+                "shop_id":GLOBAL.shop_id,
+                "appointment_date":GLOBAL.date,
+                "appointment_time":GLOBAL.time,
+                "total_amount":GLOBAL.sum,
+                "payment_mode":GLOBAL.mode,
+                "discount":0,
+                "coupan_id":0,
+                "coupan_discount":0,
+                "wallet_discount":0
+            
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+             this.hideLoading()
+
+               
+                
+                
+                        // alert(JSON.stringify( responseData))
+                     
+                   
+                   
+                this.props.navigation.navigate('ThankScreen')
+            
+
+               
 
     
+            
+
+           
+      })
+      .catch((error) =>{
+        console.error(error);
+      })
+    }
+      
 
   }
 
@@ -336,11 +415,12 @@ var radio_props = [
                      
                      <Text style={{fontSize:18,fontFamily:'Poppins-SemiBold',color:'black',marginLeft:40}}>₹ {GLOBAL.sum}/-</Text>
 
-                     <Button style={{fontSize:14,fontFamily:'Poppins-Medium',color:'white'}}
-   containerStyle={{height:42,width:100,borderRadius:6,backgroundColor:'black',justifyContent:'center',marginRight:20}}
-   onPress={()=>this.payCheck()}>
-   Pay Now
-  </Button>
+                     <TouchableOpacity
+                       style={{height:42,width:100,borderRadius:6,backgroundColor:'black',justifyContent:'center',marginRight:20}} onPress={()=>this.payCheck()}>
+                       <Text style={{fontSize:14,fontFamily:'Poppins-Medium',color:'white',alignSelf:'center'}}>Pay Now</Text>
+   
+  
+                     </TouchableOpacity>
                    </View>
 
                     </SafeAreaProvider>

@@ -95,11 +95,14 @@ class Summary extends React.Component {
                if (responseData.status == true) {
                 
                 
-                          // alert(JSON.stringify( responseData))
+                           // alert(JSON.stringify(responseData))
+                         GLOBAL.shopping = responseData.shop_name
+                         GLOBAL.dukan_id = responseData.shop_id
+
                      GLOBAL.sum = responseData.total_amount
                      GLOBAL.sum_id = responseData.booking_type
                   this.setState({Flatlistitems: responseData.cart  })
-                   
+                   // alert(JSON.stringify(responseData.shop_id))
                    
 
             }
@@ -129,7 +132,7 @@ class Summary extends React.Component {
            
            
          else if (GLOBAL.sum_id=='visit_at_salon') {
-
+           GLOBAL.shop_id = GLOBAL.dukan_id
           this.props.navigation.navigate('AppointScreen');
          }
       
@@ -356,15 +359,45 @@ _keyExtractor=(item, index)=>item.key;
                             />
                         </TouchableOpacity>
                         </View>
-
+                        
+                        <View style={{width:'80%'}}>
+                        
+                        
+                        {GLOBAL.sum_id=='visit_at_home' &&(
 
                         <Text style = {{color:'white',fontFamily:'Exo2-Bold',fontSize: 20,marginLeft:20}}>
-                           Cart
+                           Visit At Home
               
           
 
                        </Text>
+                       )}
 
+                       {GLOBAL.sum_id=='visit_at_salon' &&(
+                        
+                        <View style={{width:'100%'}}>
+                        <Text style = {{color:'white',fontFamily:'Poppins-SemiBold',fontSize: 20,marginLeft:20}}>
+                           Visit At Salon
+              
+          
+            
+                       </Text>
+                       <Text style = {{color:'white',fontFamily:'Poppins-Medium',fontSize:14,marginLeft:20,width:'100%'}}>
+                           {GLOBAL.shopping}
+              
+          
+            
+                       </Text>
+
+                       </View>
+                       )}
+
+
+                       
+                       
+
+                       
+                      </View>
 
                         
 

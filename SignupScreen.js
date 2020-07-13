@@ -1,3 +1,5 @@
+
+
 import {
   SafeAreaView,
   Platform,
@@ -92,6 +94,8 @@ class SignupScreen extends React.Component {
     //  }
     //     })
 
+      // alert(JSON.stringify(this.state.date))
+
      var gender =''
       if (this.state.value==0) {
          gender= 'Male'
@@ -100,7 +104,7 @@ class SignupScreen extends React.Component {
          gender='female'
       }
 
-       // alert(JSON.stringify(this.state.value))
+       // alert(JSON.stringify(gender))
 
        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
      
@@ -136,7 +140,7 @@ class SignupScreen extends React.Component {
 //password
      else {
           
-          const url = GLOBAL.BASE_URL +  'signup'
+          const url = 'https://yawd.in/admin/api/customers/signup'
 
           this.showLoading()
             fetch(url, {
@@ -173,10 +177,11 @@ class SignupScreen extends React.Component {
     if (responseData.status == true ) { 
 
 
-        GLOBAL.mobile = this.state.mobile
+         GLOBAL.mobile = this.state.mobile
 
-        // alert(JSON.stringify(responseData))
-
+          // alert(JSON.stringify(responseJson))
+              
+              // alert('hi')
         
 
         GLOBAL.user_id = responseData.user_id
@@ -184,9 +189,13 @@ class SignupScreen extends React.Component {
         this.props.navigation.replace('OtpScreen')
       
         AsyncStorage.setItem('userID', responseData.user_id);
+        
+        
       
-}else {
-  alert("Invalid Credentials")
+}else
+
+ {
+   alert(JSON.stringify(responseData.message))
 }
 
            

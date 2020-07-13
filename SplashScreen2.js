@@ -55,7 +55,7 @@ class SplashScreen2 extends React.Component {
         // value previously stored
            GLOBAL.user_id = value
            GLOBAL.token = tokenvalue
-          this.props.navigation.navigate('Tab')
+          this.props.navigation.navigate('Drawer')
       }else{
           this.props.navigation.navigate('StyleScreen2')
 

@@ -134,7 +134,7 @@ class Wallet extends React.Component {
 
   
   renderItem=({item}) => {
-        alert(JSON.stringify(item))
+        // alert(JSON.stringify(item))
 
     return(
 
