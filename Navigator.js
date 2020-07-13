@@ -1,14 +1,8 @@
 import React, {Component} from 'react';
 import { View, Text, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
-  import 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SplashScreen2 from './SplashScreen2.js';
 import StyleScreen2  from './StyleScreen2.js';
@@ -25,7 +19,7 @@ import HomeScreen from './HomeScreen.js';
 import Appointment from './Appointment.js';
 import Notification from './Notification.js';
 import ProfileScreen from './ProfileScreen.js';
-
+import DrawerComponent from './DrawerComponent.js';
 import SupportScreen from './SupportScreen.js';
 import PrivacyScreen from './PrivacyScreen.js';
 import PackageScreen from './PackageScreen.js';
@@ -48,8 +42,24 @@ import Dummy from './Dummy.js';
 import Wallet from './Wallet.js';
 import AgainScreen from './AgainScreen.js';
 
+import SearchScreen from './SearchScreen.js';
 
 
+
+
+const Drawer = createDrawerNavigator();
+
+
+const MyDrawer=(props)=> {
+  return (
+    <Drawer.Navigator drawerContent={(props) => <DrawerComponent {...props}/> }>
+
+        <Drawer.Screen
+        name="Tab" component={Tabs}/>
+
+    </Drawer.Navigator>
+  );
+}
 
 
 const Tab = createBottomTabNavigator();     
@@ -110,21 +120,7 @@ function Tabs() {
 
  
 
-const Drawer = createDrawerNavigator();
 
-
-function DrawerTab() {
-  return (
-       
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName="HomeScreen" >
-        <Drawer.Screen name="HomeScreen" component={HomeScreen} />
-        <Drawer.Screen name="TcScreen" component={TcScreen} />
-      </Drawer.Navigator>
-    </NavigationContainer>
-
-);
-}
 
 
 
@@ -169,11 +165,12 @@ function App() {
         <Stack.Screen name="Dummy" component={Dummy} />
         <Stack.Screen name="Wallet" component={Wallet} />
         <Stack.Screen name="AgainScreen" component={AgainScreen} />
+        <Stack.Screen name="SearchScreen" component={SearchScreen} />
 
         
 
 
-        <Stack.Screen name="DrawerTab" component={DrawerTab} />
+        <Stack.Screen name="Drawer" component={MyDrawer} />
         <Stack.Screen name="Tab" component={Tabs} />
 
       </Stack.Navigator>

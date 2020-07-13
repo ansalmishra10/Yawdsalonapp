@@ -66,6 +66,7 @@ class OnlineScreen extends React.Component {
        }
 
    componentDidMount() {
+    // alert(JSON.stringify(GLOBAL.shop_id))
      this.getProfile()
  }
 
@@ -159,6 +160,8 @@ class OnlineScreen extends React.Component {
 
 
                     <View style={{flex:1,backgroundColor:'white'}}>
+
+                    {GLOBAL.shop_id == 0 &&(
                     <WebView
                        source={{uri: 'https://www.yawd.in/admin_old/payment/ccav_request_2',
                        body:JSON.stringify({
@@ -185,6 +188,38 @@ class OnlineScreen extends React.Component {
 
                        sharedCookiesEnabled={true}
                    />
+
+                   )}
+
+                    {GLOBAL.shop_id != 0 &&(
+                       
+                       <WebView
+                       source={{uri: 'https://www.yawd.in/admin_old/payment/ccav_request_2',
+                       body:JSON.stringify({
+                          
+                          "total_amount":GLOBAL.sum,
+                          "txn_amount":GLOBAL.sum,
+                          "name": this.state.firstname,
+                          "phone_no":this.state.mobile,
+                          "email_id":this.state.email,
+                          "user_id":GLOBAL.user_id,
+                          "address_id":0,
+                          "shop_id":GLOBAL.shop_id,
+                          "appointment_date":GLOBAL.date,
+                          "appointment_time":GLOBAL.time,
+                          "payment_mode":GLOBAL.mode,
+                          "discount":0,
+                          "coupan_id":0,
+                          "coupan_discount":0,
+                          "wallet_discount":0
+
+                           }), method:'post'}}
+
+                       style={{marginBottom:10,width:'100%',height:'100%'}}
+
+                       sharedCookiesEnabled={true}
+                   />
+                    )}
                     </View>
 
 

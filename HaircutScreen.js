@@ -107,20 +107,20 @@ onButtonClick1=()=> {
 
       this.onButtonClick4()
       
-      this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      // this._unsubscribe = this.props.navigation.addListener('focus', () => {
        
       Geolocation.getCurrentPosition(info => {
         
         this.setState({ lat : info.coords.latitude })
         this.setState({ long : info.coords.longitude })
-        // alert(JSON.stringify(this.state.lat))
+         // alert(JSON.stringify(this.state.lat))
           // alert(JSON.stringify(this.state.text));
           this.getShop();
 
           
       });
 
-    })
+    // })
 
       // this.getData();
 

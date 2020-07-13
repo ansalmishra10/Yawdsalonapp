@@ -118,7 +118,7 @@ class LoginScreen2 extends React.Component {
 
         
          
-            this.props.navigation.replace('Tab')
+            this.props.navigation.replace('Drawer')
       
         
       

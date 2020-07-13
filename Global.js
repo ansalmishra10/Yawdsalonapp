@@ -37,6 +37,10 @@ module.exports = {
     house:'',
     reshed_date:'',
     reshed_time:'',
+    shopping:'',
+    draw:'',
+    ref:'',
+    dukan_id:'',
 
     
     

@@ -99,7 +99,7 @@ class AddAddress extends React.Component {
 
   componentDidMount () {
     this.onButtonClick1()
-   // alert(JSON.stringify(this.state.text))
+    // alert(JSON.stringify(this.state.text))
   }
 
 
@@ -112,7 +112,7 @@ getRemoteData=()=> {
     //  }
         // })
 
-       // alert(JSON.stringify(GLOBAL.long)) 
+        // alert(JSON.stringify(GLOBAL.long)) 
 
      var gender =''
       if (this.state.value==0) {
@@ -175,13 +175,13 @@ getRemoteData=()=> {
 
         
 
-         // alert(JSON.stringify(responseData))
+          // alert(JSON.stringify(responseData))
 
         
 
         // GLOBAL.user_id = responseData.user_id
          
-         this.props.navigation.replace('AddScreen')
+          this.props.navigation.navigate('AddScreen')
       
         // AsyncStorage.setItem('userID', responseData.user_id);
       

@@ -281,6 +281,58 @@ renderItem2=({item}) => {
 
 _keyExtractor2=(item, index)=>item.key;
 
+initiatedrawer=()=> {
+
+      const url = GLOBAL.BASE_URL +  'get_profile'
+
+        
+
+          
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              
+          
+              "user_id": GLOBAL.user_id,
+            
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+             
+               
+                
+                
+                      
+                      // alert(JSON.stringify(responseData))
+                     
+                     GLOBAL.draw = responseData.user
+                      this.props.navigation.toggleDrawer()
+                     // this.setState({profile: responseData.user})
+                     
+                     
+
+                       
+
+                   })
+      .catch((error) =>{
+        console.error(error);
+      })
+}
+
   render() {
     if(this.state.loading){
       return(
@@ -304,12 +356,25 @@ _keyExtractor2=(item, index)=>item.key;
                    
                    <StatusBar backgroundColor="black" barStyle="light-content" />
 
-                      <View style = {{height:70,backgroundColor:'black',flexDirection:'row',width:'100%',alignItems:'center'}}>
+                      <View style = {{height:60,backgroundColor:'black',flexDirection:'row',width:'100%',alignItems:'center',justifyContent:'space-between'}}>
                         <View>
-                        <TouchableOpacity onPress= {()=>this.props.navigation.goBack()}>
+                        <TouchableOpacity onPress={()=>this.initiatedrawer()}>
                             <Image
-                                source={require('./back2.png')}
-                                style={{width: 25, height: 28,marginLeft:18,resizeMode:'contain'}}
+                                source={require('./drawer.png')}
+                                style={{width: 30, height:30,marginLeft:20,resizeMode:'contain'}}
+
+
+                            />
+                        </TouchableOpacity>
+                        </View>
+                       
+                        <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'white',width:'68%'}}>{GLOBAL.house}</Text>
+
+                        <View>
+                        <TouchableOpacity onPress={()=>this.props.navigation.navigate('SearchScreen')}>
+                            <Image
+                                source={require('./search.png')}
+                                style={{width: 25, height: 25,resizeMode:'contain',marginRight:20}}
 
 
                             />
@@ -317,20 +382,7 @@ _keyExtractor2=(item, index)=>item.key;
                         </View>
 
 
-                        <Text style={{fontSize:13,fontFamily:'Poppins-Medium',color:'white',width:'80%',marginLeft:15}}>{GLOBAL.house}</Text>
-
-
-                        
-
-                    
-                       
-
-
-                        
-
-                        
-
-                    </View>
+                        </View>
 
                     <ScrollView style={{backgroundColor:'#e3e3e3'}}>
          
@@ -348,6 +400,8 @@ _keyExtractor2=(item, index)=>item.key;
   
 <View style={{height:'100%',backgroundColor:'#e3e3e3'}}>
 
+ {this.state.Flatlistitems2.length != 0 &&( 
+
   <FlatList style={{marginTop:5,marginBottom:10}}
                        data={this.state.Flatlistitems2}
                        
@@ -355,12 +409,23 @@ _keyExtractor2=(item, index)=>item.key;
                        keyExtractor={this._keyExtractor2}
                        renderItem={this.renderItem2}
               />
+
+              )}
+
+
+          {this.state.Flatlistitems2.length == 0 &&(
+            
+            <Text style={{fontSize:20,fontFamily:'Poppins-SemiBold',color:'black',alignSelf:'center',marginTop:'70%'}}>No Booking Found</Text>
+
+          )}    
 </View>
 
 )}
 {this.state.selectedTab!=0 &&(
 
   <View style={{height:'100%',backgroundColor:'#e3e3e3'}}>
+
+  {this.state.Flatlistitems.length != 0 &&( 
 
   <FlatList style={{marginTop:5,marginBottom:10}}
                        data={this.state.Flatlistitems}
@@ -369,6 +434,14 @@ _keyExtractor2=(item, index)=>item.key;
                        keyExtractor={this._keyExtractor}
                        renderItem={this.renderItem}
               />
+
+          )} 
+          
+          {this.state.Flatlistitems.length == 0 &&(
+            
+            <Text style={{fontSize:20,fontFamily:'Poppins-SemiBold',color:'black',alignSelf:'center',marginTop:'70%'}}>No Booking Found</Text>
+
+          )}     
 </View>
 
 

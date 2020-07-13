@@ -23,8 +23,7 @@ import {
   } from 'react-native';
 import React, {Component} from 'react';
 import Button from 'react-native-button';
-import { NavigationContainer
- } from '@react-navigation/native';
+import { NavigationContainer,  DrawerActions } from '@react-navigation/native';
  import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -32,8 +31,8 @@ import { NavigationContainer
   DrawerItem,
 } from '@react-navigation/drawer';
 
+
 import Geolocation from '@react-native-community/geolocation';
-import 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import HTML from 'react-native-render-html';
 const htmlContent = `
@@ -95,13 +94,15 @@ class HomeScreen extends React.Component {
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
-              "use_for": type
+              "use_for": type,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -139,7 +140,7 @@ class HomeScreen extends React.Component {
    }
 
    componentDidMount () {
-      // alert(JSON.stringify(GLOBAL.token))
+       // alert(JSON.stringify(GLOBAL.token))
        Geolocation.getCurrentPosition(info => {
         
         this.setState({ lat : info.coords.latitude })
@@ -161,7 +162,8 @@ class HomeScreen extends React.Component {
             },
             body: JSON.stringify({
               "latitude": this.state.lat,
-              "longitude": this.state.long
+              "longitude": this.state.long,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -319,13 +321,15 @@ getbannerDetails=(package_id, service_id)=> {
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "package_id": package_id,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -375,13 +379,15 @@ getbannerDetails=(package_id, service_id)=> {
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "service_id": service_id,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -513,13 +519,15 @@ setValuePack=(package_id)=>{
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "package_id": package_id,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -600,13 +608,15 @@ bottombannerDetails=(package_id, service_id)=> {
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "package_id": package_id,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -656,13 +666,17 @@ bottombannerDetails=(package_id, service_id)=> {
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
+
+
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "service_id": service_id,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -714,6 +728,58 @@ setValueAgain=(type)=>{
    
 }
 
+initiatedrawer=()=> {
+
+      const url = GLOBAL.BASE_URL +  'get_profile'
+
+        
+
+          
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              
+          
+              "user_id": GLOBAL.user_id,
+            
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+             
+               
+                
+                
+                      
+                      // alert(JSON.stringify(responseData))
+                     
+                     GLOBAL.draw = responseData.user
+                      this.props.navigation.toggleDrawer()
+                     // this.setState({profile: responseData.user})
+                     
+                     
+
+                       
+
+                   })
+      .catch((error) =>{
+        console.error(error);
+      })
+}
+
 
 
   render() {
@@ -740,7 +806,7 @@ setValueAgain=(type)=>{
 
                       <View style = {{height:60,backgroundColor:'black',flexDirection:'row',width:'100%',alignItems:'center',justifyContent:'space-between'}}>
                         <View>
-                        <TouchableOpacity onPress={()=>this.props.navigation.toggleDrawer()}>
+                        <TouchableOpacity onPress={()=>this.initiatedrawer()}>
                             <Image
                                 source={require('./drawer.png')}
                                 style={{width: 30, height:30,marginLeft:20,resizeMode:'contain'}}
@@ -753,7 +819,7 @@ setValueAgain=(type)=>{
                         <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'white',width:'68%'}}>{GLOBAL.house}</Text>
 
                         <View>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.props.navigation.navigate('SearchScreen')}>
                             <Image
                                 source={require('./search.png')}
                                 style={{width: 25, height: 25,resizeMode:'contain',marginRight:20}}

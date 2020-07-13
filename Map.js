@@ -21,6 +21,7 @@ import {
 import React, {Component} from 'react';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Geolocation from '@react-native-community/geolocation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {fetch, removeCookieByName} from 'react-native-ssl-pinning';
 import Button from 'react-native-button';
@@ -32,7 +33,8 @@ class Map extends React.Component {
   constructor(props) {
      super(props);
        this.state ={
-    
+        lat:'',
+        long:'',
          
          loading:'',
          
@@ -48,14 +50,72 @@ class Map extends React.Component {
        }
 
   setValue=(data, details)=>{
+
+     // alert(JSON.stringify(details.geometry.location.lat))
        GLOBAL.address = data.description
        GLOBAL.lat = details.geometry.location.lat
        GLOBAL.long = details.geometry.location.lng
 
-       this.hideLoading()
+       // this.hideLoading()
        
-       this.props.navigation.replace('AddAddress')
+        this.props.navigation.replace('AddAddress')
   }
+
+  setGps=()=> {
+    Geolocation.getCurrentPosition(info => {
+        
+        this.setState({ lat : info.coords.latitude })
+        this.setState({ long : info.coords.longitude })
+
+
+      const url = GLOBAL.BASE_URL +  'lat_long_address'
+
+          this.showLoading()
+            fetch(url, {
+            method: 'POST',
+            timeoutInterval: 1000, 
+            headers: {
+                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
+            },
+            sslPinning: {
+                certs: ['yawd']
+            },
+            body: JSON.stringify({
+              "latitude": this.state.lat,
+              "longitude": this.state.long
+              
+              
+            })
+        })
+
+            .then((response) => response.json())
+            .then((responseData) => {
+             
+
+
+                   // alert(JSON.stringify(responseData.address))
+                  // GLOBAL.house = responseData.address
+                  GLOBAL.address = responseData.address
+                  GLOBAL.lat = this.state.lat
+                  GLOBAL.long = this.state.long
+                  this.props.navigation.replace('AddAddress')
+                 
+
+    this.hideLoading()
+            
+
+           
+      })
+      .catch((error) =>{
+        console.error(error);
+      })
+
+        });
+  }
+
+  
 
   render() {
     if(this.state.loading){
@@ -106,6 +166,17 @@ class Map extends React.Component {
 
 
   <View style={{flex:1,backgroundColor:'white'}}>
+
+  <TouchableOpacity style={{height:50,width:'92%',marginLeft:'4%',backgroundColor:'white',flexDirection:'row',
+
+
+  alignItems:'center',borderRadius:4,marginBottom:15,marginTop:16,elevation:3}} onPress={()=>this.setGps()}>
+   <Image source={require('./track.png')}
+   style={{ height:30,width:30,resizeMode:'contain',marginLeft:20}}/>
+      <Text style={{fontSize:14,fontFamily:'Poppins-Medium',color:'#0000004D',marginLeft:15}}>Use my current location (GPS)</Text>
+   
+  
+  </TouchableOpacity>
 
   
     <GooglePlacesAutocomplete

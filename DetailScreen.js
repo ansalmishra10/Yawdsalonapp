@@ -97,7 +97,7 @@ setModalVisible2=()=> {
 
   
   submitAnswer=()=>{
-    alert(this.state.value)
+    // alert(this.state.value)
 
      if(this.state.value==0){
        this.setState({ text: 'Placed the request by mistake'})
@@ -151,7 +151,7 @@ setModalVisible2=()=> {
              
 
 
-                 alert(JSON.stringify(responseData))
+                 // alert(JSON.stringify(responseData))
                  this.props.navigation.navigate('Appointment')
                
                this.setModalVisible2()

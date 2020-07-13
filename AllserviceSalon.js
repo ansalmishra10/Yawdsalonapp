@@ -38,7 +38,7 @@ class AllserviceSalon extends React.Component {
        this.state ={
     
          Flatlistitems1:GLOBAL.cat,
-         
+         Flatlistitems2:[],
          loading:'',
          gender:'',
          modalVisible:false,
@@ -139,7 +139,7 @@ setModalVisible2=()=> {
 
 
 <TouchableOpacity style={{height:40,width:'auto',borderRadius:20,borderWidth:2,borderColor:'#e3e3e3',marginLeft:18,justifyContent:'center'}}
-onPress={()=>this.setValue(item.category_id)}>
+onPress={()=>this.setValue(item.category_id, item)}>
 
 
  
@@ -166,7 +166,7 @@ onPress={()=>this.setValue(item.category_id)}>
 
 _keyExtractor=(item, index)=>item.key;
 
-renderItem2=({item}) => {
+renderItem2=({item, index}) => {
          // console.log(item)
     return(
 
@@ -206,8 +206,14 @@ renderItem2=({item}) => {
       <Text style={{fontSize:16,fontFamily:'Poppins-SemiBold',color:'black',width:'40%'}}>₹ {item.selling_price}/-</Text>
       
       <TouchableOpacity style={{height:34,width:76,justifyContent:'center',backgroundColor:'black',borderRadius:16}}
-        onPress={()=>this.setcarditem(item.prod_type, item.id)}>
-       <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'white',alignSelf:'center'}}>Add</Text>
+        onPress={()=>this.setcarditem(item.prod_type, item.id, item, index)}>
+       {item.is_cart == 0 && (  
+       <Text style={{fontSize:12,fontFamily:'Poppins-SemiBold',color:'white',alignSelf:'center'}}>Add</Text>
+       )}
+
+       {item.is_cart == 1 && (  
+       <Text style={{fontSize:12,fontFamily:'Poppins-SemiBold',color:'white',alignSelf:'center'}}>Added</Text>
+       )}
       </TouchableOpacity>
       
    </View>
@@ -294,13 +300,15 @@ setValueagain=(prod_type, id)=> {
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "package_id": id,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -349,13 +357,15 @@ setValueagain=(prod_type, id)=> {
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "service_id": id,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -394,14 +404,14 @@ setValueagain=(prod_type, id)=> {
 
 _keyExtractor2=(item, index)=>item.key;
 
- setcarditem=(prod_type, id)=> {
-   // alert(JSON.stringify(GLOBAL.user_id))
+ setcarditem=(prod_type, id, item, index)=> {
+    // alert(JSON.stringify(index))
 
-   if (prod_type== 'package') {
+    if (prod_type== 'package') {
 
         const url = GLOBAL.BASE_URL +  'add_to_cart'
 
-          this.showLoading()
+          // this.showLoading()
             fetch(url, {
             method: 'POST',
             timeoutInterval: 1000, 
@@ -426,22 +436,35 @@ _keyExtractor2=(item, index)=>item.key;
             .then((response) => response.json())
             .then((responseData) => {
              
-             this.hideLoading()
+             // this.hideLoading()
 
                if (responseData.status == true) {
                 
                 
                     // alert(JSON.stringify(responseData))
+                    var a = this.state.Flatlistitems2[index]
+                       // alert(JSON.stringify(a))
+     if (a.is_cart  == 0) {
+       a.is_cart = 1
+        // alert(JSON.stringify(item.is_selected))
+     }
+     else{
+            a.is_cart = 0
+            
+     }
+
+     this.state.Flatlistitems2[index] = a
+     this.setState({Flatlistitems2:this.state.Flatlistitems2})
                   
                    
                   this.getcartitems()
                    
                    
-                   alert('Successfully Added')
+                   // alert('Successfully Added')
                
             }
             else{
-                alert('Please select services of either visit at Home or Salon.')
+                alert(JSON.stringify(responseData.message))
             }
 
                
@@ -463,7 +486,7 @@ _keyExtractor2=(item, index)=>item.key;
 
 
 
-          this.showLoading()
+          // this.showLoading()
             fetch(url, {
             method: 'POST',
             timeoutInterval: 1000, 
@@ -489,22 +512,35 @@ _keyExtractor2=(item, index)=>item.key;
             .then((response) => response.json())
             .then((responseData) => {
              
-             this.hideLoading()
+             // this.hideLoading()
 
                if (responseData.status == true) {
                 
                 
                     // alert(JSON.stringify(responseData))
+                    var a = this.state.Flatlistitems2[index]
+                       // alert(JSON.stringify(a))
+     if (a.is_cart  == 0) {
+       a.is_cart = 1
+        // alert(JSON.stringify(item.is_selected))
+     }
+     else{
+            a.is_cart = 0
+            
+     }
+
+     this.state.Flatlistitems2[index] = a
+     this.setState({Flatlistitems2:this.state.Flatlistitems2})
                   
                    this.getcartitems()
                    
                    
                    
-                   alert('Successfully Added')
-
+                    // alert('Successfully Added')
+               
             }
             else{
-                alert('Please select services of either visit at Home or Salon.')
+                alert(JSON.stringify(responseData.message))
             }
 
                
@@ -525,7 +561,7 @@ _keyExtractor2=(item, index)=>item.key;
 
         
 
-          this.showLoading()
+          // this.showLoading()
             fetch(url, {
             method: 'POST',
             timeoutInterval: 1000, 
@@ -578,8 +614,8 @@ _keyExtractor2=(item, index)=>item.key;
       })
     }
 
-setValue =(category_id) => {
-   // alert(JSON.stringify(category_id))
+setValue =(category_id, item) => {
+    // alert(JSON.stringify(item))
 
  
 
@@ -614,8 +650,8 @@ setValue =(category_id) => {
                if (responseData.status == true) {
                 
                 
-                    // alert(JSON.stringify(responseData))
-                
+                      // alert(JSON.stringify(responseData))
+     
                 this.setState({Flatlistitems2: responseData.data })
                
             }

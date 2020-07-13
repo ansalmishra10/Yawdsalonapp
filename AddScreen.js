@@ -41,7 +41,7 @@ class AddScreen extends React.Component {
         value: 0,
         Flatlistitems:[],
         loading:'',
-    
+        first:'',
         newimage:0,
         lat:'',
         long:'',
@@ -69,82 +69,96 @@ class AddScreen extends React.Component {
   }
 
   navigate=()=>{
-    GLOBAL.address = ''
-    this.props.navigation.navigate('AddAddress')
+    // GLOBAL.address = ''
+    
   }
 
 
   onButtonClick=(item, index)=>{
 
-    Geolocation.getCurrentPosition(info => {
-        
-        this.setState({ lat : info.coords.latitude })
-        this.setState({ long : info.coords.longitude })
-        // alert(JSON.stringify(this.state.lat))
-          // alert(JSON.stringify(this.state.text));
-          const url = GLOBAL.BASE_URL +  'location_check'
 
-          this.showLoading()
-            fetch(url, {
-            method: 'POST',
-            timeoutInterval: 1000, 
-            headers: {
-                'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json',
-                'Authorization': GLOBAL.token
-            },
-            sslPinning: {
-                certs: ['yawd']
-            },
-            body: JSON.stringify({
-              "lat": this.state.lat,
-              "long": this.state.long,
+     // alert(JSON.stringify(item.is_selected))
+    // Geolocation.getCurrentPosition(info => {
+        
+    //     this.setState({ lat : info.coords.latitude })
+    //     this.setState({ long : info.coords.longitude })
+    //     // alert(JSON.stringify(this.state.lat))
+    //       // alert(JSON.stringify(this.state.text));
+    //       const url = GLOBAL.BASE_URL +  'location_check'
+
+    //       this.showLoading()
+    //         fetch(url, {
+    //         method: 'POST',
+    //         timeoutInterval: 1000, 
+    //         headers: {
+    //             'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
+    //             'Content-Type': 'application/json',
+    //             'Authorization': GLOBAL.token
+    //         },
+    //         sslPinning: {
+    //             certs: ['yawd']
+    //         },
+    //         body: JSON.stringify({
+    //           "lat": this.state.lat,
+    //           "long": this.state.long,
               
-            })
-        })
+    //         })
+    //     })
 
-            .then((response) => response.json())
-            .then((responseData) => {
-            // alert(JSON.stringify(responseData))
+    //         .then((response) => response.json())
+    //         .then((responseData) => {
+    //         // alert(JSON.stringify(responseData))
 
-    this.hideLoading()
-    if (responseData.status == true ) { 
+    // this.hideLoading()
+    // if (responseData.status == true ) { 
 
+     //     var a = this.state.Flatlistitems[index]
+     // // alert(JSON.stringify(a))
+     // if (a.is_selected  == 0) {
+     //   a.is_selected = 1
+     //    // alert(JSON.stringify(item.is_selected))
+     // }
+     // else{
+     //        a.is_selected = 0
+            
+     // }
 
+     // this.state.Flatlistitems[index] = a
+     // this.setState({Flatlistitems:this.state.Flatlistitems})
         
 
-           // alert(JSON.stringify(responseData))
+        // alert(JSON.stringify(item.address_id))
            this.setState({ imgchange : 1  })
-               GLOBAL.add_id = item.address_id
-               alert('address selected please click button bellow')
+            GLOBAL.add_id = item.address_id
+            alert('address selected please click button bellow')
 
-         // this.setState({ Flatlistitems: responseData.address})
+//          // this.setState({ Flatlistitems: responseData.address})
 
            
          
-         // this.props.navigation.replace('AddScreen')
+//          // this.props.navigation.replace('AddScreen')
       
-        // AsyncStorage.setItem('userID', responseData.user_id);
+//         // AsyncStorage.setItem('userID', responseData.user_id);
       
-}  else {
+// }  else {
  
-  alert('Sevices could not be found for this location')
-}
+//   alert('Sevices could not be found for this location')
+// }
 
            
-      })
-      .catch((error) =>{
-        console.error(error);
-      })
+//       })
+//       .catch((error) =>{
+//         console.error(error);
+//       })
 
           
-      });
+//       });
          
-          //
+//           //
          
-         // 
+//          // 
 
-         // 
+//          // 
 
   }
 
@@ -185,7 +199,7 @@ class AddScreen extends React.Component {
 
         
 
-           // alert(JSON.stringify(responseData))
+            // alert(JSON.stringify(responseData))
 
          this.setState({ Flatlistitems: responseData.address})
 
@@ -211,8 +225,35 @@ class AddScreen extends React.Component {
     alert('select one address')
   }
 
+ //  handleChange =(item, index)=> {
+ //         // alert(JSON.stringify(item.is_selected))
+
+ // //      for (var i = 0 ; i < this.state.Flatlistitems.length ; i++){
+ // //        this.state.Flatlistitems[i].is_selected = ""
+ // //        this.setState({Flatlistitems:this.state.Flatlistitems})
+ // // }  
+
+ //     var a = this.state.Flatlistitems[index]
+ //     // alert(JSON.stringify(a))
+ //     if (a.is_selected  == "") {
+ //       a.is_selected = "Y"
+ //        // alert(JSON.stringify(item.is_selected))
+ //     }
+ //     else{
+ //            a.is_selected = ""
+            
+ //     }
+
+ //     this.state.Flatlistitems[index] = a
+ //     this.setState({Flatlistitems:this.state.Flatlistitems})
+
+
+
+ // }
+
+
   renderItem=({item, index}) => {
-          alert(JSON.stringify(item.is_selected))
+           // alert(JSON.stringify(item.is_selected))
     
     return(
 
@@ -225,8 +266,9 @@ class AddScreen extends React.Component {
 
 <TouchableOpacity style={{alignSelf:'flex-end',marginTop:10,marginRight:10}}
  onPress={()=>this.removeAddress(item.address_id)}>
-<Image source={require('./cut.png')}
-  style={{height:16,width:16, resizeMode:'contain'}}/>
+<Image source={require('./del2.png')}
+  style={{height:20,width:20
+    , resizeMode:'contain'}}/>
   </TouchableOpacity>
 
  <View style={{flexDirection:'row',alignItems:'center',width:'100%',marginBottom:15,justifyContent:'space-between'}}>
@@ -235,34 +277,24 @@ class AddScreen extends React.Component {
  
  <Text style={{fontSize:15,fontFamily:'Poppins-SemiBold',color:'#00000066',width:'100%'}}>{item.address_nickname} : {item.name} - {item.appartment}</Text>
 
- <Text style={{fontSize:15,fontFamily:'Poppins-Medium',color:'black',marginTop:5}}>{item.location}</Text>
 
+ <Text style={{fontSize:15,fontFamily:'Poppins-Medium',color:'black',marginTop:5}}>{item.location}</Text>
+ 
 
  </View>
 
    
 
-   <View style={{height:40,width:40,marginRight:12,backgroundColor:'yellow'}}>
+   
+   <TouchableOpacity style={{height:30,width:60,borderRadius:15,borderWidth:3,backgroundColor:'black',borderColor:'black',marginRight:12,justifyContent:'center'}}
+     onPress={()=>this.onButtonClick(item, index)}>
+     <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'white',alignSelf:'center'}}>add {index+1}</Text>
+    </TouchableOpacity>
 
-   {item.is_selected == '' && (
-                 <TouchableOpacity style = {{height:30,width:30,borderRadius:15,backgroundColor:'white',marginTop:2,borderWidth:3,borderColor:'black',justifyContent:'center'}}>
-                    
-                    <View style={{height:18,width:18,borderRadius:9,backgroundColor:'black',alignSelf:'center'}}>
-                    </View>
-                    
-                 </TouchableOpacity>
-    )}
-
-    {item.is_selected != '' && (
-                 <TouchableOpacity style = {{height:30,width:30,borderRadius:15,backgroundColor:'white',marginTop:2,borderWidth:3,borderColor:'black',justifyContent:'center'}}>
-                    
-                    
-                    
-                 </TouchableOpacity>
-    )}
+    
      
 
-   </View>
+   
   
   
 
@@ -279,6 +311,12 @@ class AddScreen extends React.Component {
 
 )
 }
+
+// stay=(item)=> {
+//   alert(JSON.stringify(item))
+// }
+
+ 
 
 
 _keyExtractor=(item, index)=>item.key;
@@ -342,6 +380,11 @@ _keyExtractor=(item, index)=>item.key;
       })
  }
 
+  addAdd=()=> {
+    GLOBAL.address = ''
+    this.props.navigation.navigate('AddAddress')
+  }
+
 
 
   render() {
@@ -402,12 +445,14 @@ _keyExtractor=(item, index)=>item.key;
                        renderItem={this.renderItem}
               />
 
-                    <TouchableOpacity style={{flexDirection:'row',height:84,width:'92%',borderTopWidth:1,borderBottomWidth:1,borderColor:'#e3e3e3',marginLeft:'4%',backgroundColor:'white',alignItems:'center'}}
-                      onPress={()=>this.navigate()}>
-
+                    <View style={{height:84,width:'92%',borderTopWidth:1,borderBottomWidth:1,borderColor:'#e3e3e3',marginLeft:'4%',backgroundColor:'white',justifyContent:'center'}}>
+                     
+                     <TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={()=>this.addAdd()}>
                      <Text style={{fontSize:28,fontFamily:'Poppins-SemiBold',color:'#000000CC',marginLeft:15}}>+</Text>
                      <Text style={{fontSize:16,fontFamily:'Poppins-SemiBold',color:'#000000CC',marginLeft:20,width:'70%'}}>Add a new address</Text>
                      </TouchableOpacity>
+
+                     </View>
                      
                     </ScrollView>
 

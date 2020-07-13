@@ -49,27 +49,27 @@ import MaterialTabs from 'react-native-material-tabs';
              <SafeAreaProvider>
                    <StatusBar backgroundColor="black" barStyle="light-content" />
 
-                 <LinearGradient
-                     start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                     colors={['#F80E94','#FF69B4' ]}
-                     style={{height:65,flexDirection:'row',width:'100%',alignItems:'center',elevation:3}}>
-                     <View>
-                        <TouchableOpacity style={{marginLeft:20}}     onPress= {()=>this.props.navigation.goBack()}>
+                 <View style = {{height:60,backgroundColor:'black',flexDirection:'row',width:'100%',alignItems:'center'}}>
+                        <View>
+                        <TouchableOpacity onPress= {()=>this.props.navigation.goBack()}>
                             <Image
                                 source={require('./back2.png')}
-                                style={{width: 24, height: 20,resizeMode:'contain'}}
+                                style={{width: 25, height: 28,marginLeft:20,resizeMode:'contain'}}
 
 
                             />
-                            
                         </TouchableOpacity>
                         </View>
 
 
-                        <Text style = {{color:'white',fontFamily:'Poppins-Medium',fontSize: 20,marginLeft:20}}>
-                           Invite Friends
+                        <Text style = {{color:'white',fontFamily:'Exo2-Bold',fontSize: 20,marginLeft:20}}>
+                            Invite Friends
                         </Text>
-                  </LinearGradient> 
+
+
+                        
+
+                    </View>
 
                   <View style={{flex:1,backgroundColor:'white'}}>
 
@@ -77,7 +77,7 @@ import MaterialTabs from 'react-native-material-tabs';
                 items={['INVITE FRIENDS', 'FAQ']}
                 selectedIndex={this.state.selectedTab}
                 onChange={(index)=>this.showData(index)}
-                barColor="#FF69B4"
+                barColor="black"
                 indicatorColor="white"
                 activeTextColor="white"
                 inactiveTextColor="rgba(255,255,255,0.5)"
@@ -87,25 +87,20 @@ import MaterialTabs from 'react-native-material-tabs';
            <ScrollView>
               <ImageBackground source={require('./invite.png')}
                style={{height:250,width:'100%',resizeMode:'cover'}}>
-                 <Text style={{fontSize:20,fontFamily:'Poppins-Medium',color:'white',marginTop:135,width:'82%',alignSelf:'center'}}>Invite a friend and get SGDO off</Text>
+                 <Text style={{fontSize:20,fontFamily:'Poppins-Medium',color:'white',marginTop:'36%',width:'82%',alignSelf:'center'}}>Invite a friend and get SGDO off</Text>
                  <Text style={{fontSize:20,fontFamily:'Poppins-Medium',color:'white',width:'82%',alignSelf:'center',textAlign:'center',marginTop:-4}}>after they make a booking</Text>
-                 <Text style={{fontSize:14,fontFamily:'Poppins-Medium',color:'#FF69B4',alignSelf:'center',textAlign:'center',marginTop:12}}>Terms and Conditions</Text>
+                 <Text style={{fontSize:14,fontFamily:'Poppins-SemiBold',color:'white',alignSelf:'center',textAlign:'center',marginTop:12}}>Terms and Conditions</Text>
               </ImageBackground> 
 
-              <TouchableOpacity style={{marginTop:25,alignSelf:'center',width:'90%'}}
+              <TouchableOpacity style={{marginTop:25,alignSelf:'center',width:'90%',height:50,borderRadius:25,justifyContent:'center',backgroundColor:'black'}}
                  onPress={()=>this.props.navigation.navigate('BookServices')}>
 
 
-      
-
-                   <LinearGradient
-                     start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                     colors={['#F80E94','#FF69B4' ]}
-                     style={{height:54,width:'100%',borderRadius:27,justifyContent:'center'}}>
-                     <Text style={{fontSize:18,color:'#ffffff',fontFamily:'Poppins-Medium',alignSelf:'center',backgroundColor: 'transparent'}}>
+                   <Text style={{fontSize:16,color:'#ffffff',fontFamily:'Poppins-Medium',alignSelf:'center'}}>
                       Invite Friends
-                     </Text>
-                  </LinearGradient>
+                    </Text>
+
+                   
 
                 </TouchableOpacity>
 
@@ -113,22 +108,22 @@ import MaterialTabs from 'react-native-material-tabs';
                    <View style={{height:1,width:'42%',backgroundColor:'#e3e3e3'}}>
                    </View>
 
-                   <Text style={{fontSize:18,fontFamily:'Poppins-Medium',color:'black'}}>or</Text>
+                   <Text style={{fontSize:18,fontFamily:'Poppins-SemiBold',color:'black'}}>or</Text>
 
                    <View style={{height:1,width:'42%',backgroundColor:'#e3e3e3'}}>
                    </View>
                 </View>
 
-                <View style={{flexDirection:'row',height:60,width:'90%',alignItems:'center',marginLeft:'5%',marginTop:22,borderWidth:1,borderColor:'#e3e3e3'}}>
+                <TouchableOpacity style={{flexDirection:'row',height:60,width:'90%',alignItems:'center',marginLeft:'5%',marginTop:22,elevation:3,marginBottom:10,borderRadius:4,backgroundColor:'white'}}>
 
                  
                  
                  <Text style={{fontSize:18,fontFamily:'Poppins-Medium',color:'black',textAlign:'center',marginLeft:'27%'}}>SHARE YOUR LINK</Text>
                 
-                 <Image source={require('./share.png')}
+                 <Image source={require('./share1.png')}
                   style={{height:25,width:25,resizeMode:'contain',marginLeft:'18%'}}/>
 
-                </View>
+                </TouchableOpacity>
 
 
            </ScrollView>
@@ -138,7 +133,17 @@ import MaterialTabs from 'react-native-material-tabs';
         {this.state.selectedTab==1 &&(
            <View style={{flex:1,backgroundColor:'white'}}>
            <ScrollView>
-            <Text>hey</Text>
+            <Text style={{fontSize:16,fontFamily:'Poppins-Bold',color:'black',marginLeft:'5%',marginTop:20,width:'90%'}}>How does it work?</Text>
+            <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'#00000099',marginLeft:'5%',marginTop:13,width:'90%'}}>Yawd being a salon aggregator ensures you to provide all the beauty services at your doorstep only by the salons situated near you also for few services which are difficult to accomplish at your home, yawd helps you to get the right salon, with right pricing to avail it in the salon near you at your preffered time</Text>
+           
+            <Text style={{fontSize:16,fontFamily:'Poppins-Bold',color:'black',marginLeft:'5%',marginTop:50,width:'90%'}}>How can i invite friends?</Text>
+            <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'#00000099',marginLeft:'5%',marginTop:13,width:'90%'}}>It's quick and easy, you can refer your friend in few simple steps:</Text>
+            <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'#00000099',marginLeft:'5%',marginTop:13,width:'90%'}}>1. Sign into "yawd" app</Text>
+            <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'#00000099',marginLeft:'5%',marginTop:13,width:'90%'}}>2. Go to "My Account" button on the top right-hand corner and click onto the respective option, i.e. - Invite Friend</Text>
+            <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'#00000099',marginLeft:'5%',marginTop:13,width:'90%'}}>3. Their you can invite your friend via SMS or y sharing the link.</Text>
+
+            <Text style={{fontSize:16,fontFamily:'Poppins-Bold',color:'black',marginLeft:'5%',marginTop:50,width:'90%'}}>What are the benifits of referring a friend?</Text>
+            <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'#00000099',marginLeft:'5%',marginTop:13,width:'90%'}}>With our "Invite friend" Offer we get an opportunity to increase the brand awareness and to serve more. More than that you being a referrer earns Rs. 50 in your wallet for every friend who registers and completes their first order with yawd and also your friend earns Rs 50 in his wallet after being referred by you.</Text>
            </ScrollView>
           </View>
          )}

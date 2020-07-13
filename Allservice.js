@@ -38,7 +38,7 @@ class Allservice extends React.Component {
        this.state ={
     
          Flatlistitems1:GLOBAL.allservice,
-         
+         Flatlistitems2:[],
          loading:'',
          gender:'',
          modalVisible:false,
@@ -69,20 +69,22 @@ class Allservice extends React.Component {
 
      const url = GLOBAL.BASE_URL +  'get_services_by_category'
 
-          this.showLoading()
+          // this.showLoading()
             fetch(url, {
             method: 'POST',
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "use_for": GLOBAL.gender,
-              "category_id": GLOBAL.cat1
+              "category_id": GLOBAL.cat1,
+              "user_id": GLOBAL.user_id
               
             })
         })
@@ -90,7 +92,7 @@ class Allservice extends React.Component {
             .then((response) => response.json())
             .then((responseData) => {
              
-             this.hideLoading()
+             // this.hideLoading()
 
                if (responseData.status == true) {
                 
@@ -161,8 +163,8 @@ onPress={()=>this.setValue(item.category_id)}>
 
 _keyExtractor=(item, index)=>item.key;
 
-renderItem2=({item}) => {
-         // console.log(item)
+renderItem2=({item, index}) => {
+      
     return(
 
 <View>
@@ -178,7 +180,7 @@ renderItem2=({item}) => {
 
  <Text style={{fontSize:16,fontFamily:'Poppins-SemiBold',color:'black',width:'85%'}}>{item.title}</Text>
 
-  <TouchableOpacity>
+  <TouchableOpacity onPress={()=> alert(JSON.stringify(item))}>
   <Image source={require('./info.png')}
   style={{height:22,width:22,resizeMode:'contain'}} /> 
   </TouchableOpacity>
@@ -201,8 +203,15 @@ renderItem2=({item}) => {
       <Text style={{fontSize:16,fontFamily:'Poppins-SemiBold',color:'black',width:'40%'}}>₹ {item.selling_price}/-</Text>
       
       <TouchableOpacity style={{height:34,width:76,justifyContent:'center',backgroundColor:'black',borderRadius:16}}
-        onPress={()=>this.setcarditem(item.prod_type, item.id)}>
-       <Text style={{fontSize:12,fontFamily:'Poppins-Medium',color:'white',alignSelf:'center'}}>Add</Text>
+        onPress={()=>this.setcarditem(item.prod_type, item.id, item, index)}>
+
+       {item.is_cart == 0 && (  
+       <Text style={{fontSize:12,fontFamily:'Poppins-SemiBold',color:'white',alignSelf:'center'}}>Add</Text>
+       )}
+
+       {item.is_cart == 1 && (  
+       <Text style={{fontSize:12,fontFamily:'Poppins-SemiBold',color:'white',alignSelf:'center'}}>Added</Text>
+       )}
       </TouchableOpacity>
       
    </View>
@@ -236,13 +245,15 @@ setValueagain=(prod_type, id)=> {
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "package_id": id,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -291,13 +302,15 @@ setValueagain=(prod_type, id)=> {
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
               "service_id": id,
+              "user_id": GLOBAL.user_id
               
               
             })
@@ -336,14 +349,15 @@ setValueagain=(prod_type, id)=> {
 
 _keyExtractor2=(item, index)=>item.key;
 
- setcarditem=(prod_type, id)=> {
-  
+ setcarditem=(prod_type, id, item, index)=> {
+    
+    // alert(JSON.stringify(item.is_cart))
 
    if (prod_type== 'package') {
 
         const url = GLOBAL.BASE_URL +  'add_to_cart'
 
-          this.showLoading()
+          // this.showLoading()
             fetch(url, {
             method: 'POST',
             timeoutInterval: 1000, 
@@ -368,22 +382,36 @@ _keyExtractor2=(item, index)=>item.key;
             .then((response) => response.json())
             .then((responseData) => {
              
-             this.hideLoading()
+             // this.hideLoading()
 
                if (responseData.status == true) {
                 
                 
-                    // alert(JSON.stringify(responseData))
+                      // alert(JSON.stringify(index))
+
+                     var a = this.state.Flatlistitems2[index]
+                       // alert(JSON.stringify(a))
+     if (a.is_cart  == 0) {
+       a.is_cart = 1
+        // alert(JSON.stringify(item.is_selected))
+     }
+     else{
+            a.is_cart = 0
+            
+     }
+
+     this.state.Flatlistitems2[index] = a
+     this.setState({Flatlistitems2:this.state.Flatlistitems2})
                   
                    
-                  this.getcartitems()
+                   this.getcartitems()
                    
                    
-                   alert('Successfully Added')
+                   // alert('Successfully Added')
                
             }
             else{
-                alert('Please select services of either visit at Home or Salon.')
+                alert(JSON.stringify(responseData.message))
             }
 
                
@@ -405,7 +433,7 @@ _keyExtractor2=(item, index)=>item.key;
 
 
 
-          this.showLoading()
+          // this.showLoading()
             fetch(url, {
             method: 'POST',
             timeoutInterval: 1000, 
@@ -431,22 +459,37 @@ _keyExtractor2=(item, index)=>item.key;
             .then((response) => response.json())
             .then((responseData) => {
              
-             this.hideLoading()
+             // this.hideLoading()
 
                if (responseData.status == true) {
                 
                 
-                    // alert(JSON.stringify(responseData))
+                   // alert(JSON.stringify(item))
                   
+                   var a = this.state.Flatlistitems2[index]
+                       // alert(JSON.stringify(a))
+     if (a.is_cart  == 0) {
+       a.is_cart = 1
+        // alert(JSON.stringify(item.is_selected))
+     }
+     else{
+            a.is_cart = 0
+            
+     }
+
+     this.state.Flatlistitems2[index] = a
+     this.setState({Flatlistitems2:this.state.Flatlistitems2})
+                  
+                   
                    this.getcartitems()
                    
                    
                    
-                   alert('Successfully Added')
+                   // alert('Successfully Added')
 
             }
             else{
-                alert('Please select services of either visit at Home or Salon.')
+                alert(JSON.stringify(responseData.message))
             }
 
                
@@ -527,18 +570,21 @@ setValue =(category_id) => {
 
   const url = GLOBAL.BASE_URL +  'get_services_by_category'
 
-          this.showLoading()
+          // this.showLoading()
             fetch(url, {
             method: 'POST',
             timeoutInterval: 1000, 
             headers: {
                 'X-API-KEY': 'FCCDB2FFD5830D7F20E67C056DA727002AD9A403DDA29B3FDFAC22ECA226CD4F',
-                'Content-Type': 'application/json'
+
+                'Content-Type': 'application/json',
+                'Authorization': GLOBAL.token
             },
             sslPinning: {
                 certs: ['yawd']
             },
             body: JSON.stringify({
+              "user_id": GLOBAL.user_id,
               "use_for": GLOBAL.gender,
               "category_id": category_id 
               
@@ -548,7 +594,7 @@ setValue =(category_id) => {
             .then((response) => response.json())
             .then((responseData) => {
              
-             this.hideLoading()
+             // this.hideLoading()
 
                if (responseData.status == true) {
                 

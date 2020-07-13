@@ -53,6 +53,10 @@ class OtpScreen extends React.Component {
         this.setState({loading: false})
        }
 
+       // componentDidMount() {
+       //  alert(JSON.stringify(GLOBAL.mobile))
+       // }
+
 
     getRemoteData=()=> {
 
@@ -96,13 +100,13 @@ class OtpScreen extends React.Component {
 
        
 
-        // alert(JSON.stringify(responseData))
+         // alert(JSON.stringify(responseData))
 
-        
-
+         AsyncStorage.setItem('token', responseData.token);
+         GLOBAL.ref = responseData.refferral_code
         
          
-        this.props.navigation.navigate('Tab')
+         this.props.navigation.navigate('Drawer')
       
         
       
@@ -153,7 +157,8 @@ class OtpScreen extends React.Component {
 
        
 
-        // alert(JSON.stringify(responseData))
+           alert(JSON.stringify(responseData.message))
+
 
         
 
@@ -163,8 +168,8 @@ class OtpScreen extends React.Component {
       
         
       
-}else {
-  alert("Invalid Credentials")
+}else if (responseData.status == false ) {
+  alert(JSON.stringify(responseData.message))
 }
 
            
